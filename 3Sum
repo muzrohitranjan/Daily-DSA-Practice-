@@ -1,0 +1,39 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        int len = nums.length;
+        if (len < 3) return result;
+
+        Arrays.sort(nums);
+
+        for (int first = 0; first < len - 2; first++) {
+            if (nums[first] > 0) break; // Since the array is sorted, no three numbers can sum to 0 if the smallest is > 0
+
+            if (first > 0 && nums[first] == nums[first - 1]) continue; // Skip duplicate
+
+            int second = first + 1;
+            int third = len - 1;
+
+            while (second < third) {
+                int total = nums[first] + nums[second] + nums[third];
+
+                if (total == 0) {
+                    result.add(Arrays.asList(nums[first], nums[second], nums[third]));
+
+                    // Move second and third to next distinct values
+                    while (second < third && nums[second] == nums[second + 1]) second++;
+                    while (second < third && nums[third] == nums[third - 1]) third--;
+
+                    second++;
+                    third--;
+                } else if (total < 0) {
+                    second++;
+                } else {
+                    third--;
+                }
+            }
+        }
+
+        return result;
+    }
+}
