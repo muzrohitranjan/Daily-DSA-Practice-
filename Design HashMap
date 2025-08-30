@@ -1,0 +1,57 @@
+import java.util.*;
+
+class MyHashMap {
+    private static class Node {
+        int key, value;
+        Node(int k, int v) {
+            key = k;
+            value = v;
+        }
+    }
+
+    private List<Node>[] buckets;
+    private int size = 1000; // bucket size
+
+    public MyHashMap() {
+        buckets = new LinkedList[size];
+        for (int i = 0; i < size; i++) {
+            buckets[i] = new LinkedList<>();
+        }
+    }
+
+    private int hash(int key) {
+        return key % size;
+    }
+
+    public void put(int key, int value) {
+        int idx = hash(key);
+        for (Node node : buckets[idx]) {
+            if (node.key == key) {
+                node.value = value; // update
+                return;
+            }
+        }
+        buckets[idx].add(new Node(key, value)); // insert new
+    }
+
+    public int get(int key) {
+        int idx = hash(key);
+        for (Node node : buckets[idx]) {
+            if (node.key == key) {
+                return node.value;
+            }
+        }
+        return -1; // not found
+    }
+
+    public void remove(int key) {
+        int idx = hash(key);
+        Iterator<Node> it = buckets[idx].iterator();
+        while (it.hasNext()) {
+            if (it.next().key == key) {
+                it.remove();
+                return;
+            }
+        }
+    }
+}
